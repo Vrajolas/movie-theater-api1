@@ -32,6 +32,12 @@ router.put('/shows/:id/rating', getShow, async (req, res) => {
     if (req.body.rating != null) {
       res.show.rating = req.body.rating
     }
+
+    //Server Side validation for rating being empty
+    if (!rating) {
+        return res.status(404).json({ message: "Rating cannot be empty or contain whitespace" });
+    }
+
     try {
       const updatedShow = await res.show.save()
       res.json(updatedShow)
@@ -45,6 +51,19 @@ router.put('/shows/:id/status', getShow, async (req, res) => {
     if (req.body.status != null) {
       res.show.status = req.body.status
     }
+
+    //Server side valiation for status of a show
+    const {status} = req.body;
+    if (!status || status.trim().length === 0) {
+        return res.status(400).json({ message: 'Status cannot be empty or contain whitespace.' });
+      }
+      
+    if (status.length < 5 || status.length > 25) {
+        return res.status(400).json({ message: 'Status must be between 5 and 25 characters.' });
+    }
+
+    res.show.status = status;
+
     try {
       const updatedShow = await res.show.save()
       res.json(updatedShow)
@@ -62,5 +81,6 @@ router.delete('/shows/:id', getShow, async (req, res) => {
       res.status(500).json({ message: err.message })
     }
 })
+
 
 module.exports = router;
