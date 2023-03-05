@@ -2,8 +2,8 @@ const express = require('express');
 const app = expres();
 const { db } = require('./models/db');
 const port = 3000;
-const showRouter = require('./router/show-router');
-const userRouter = require ('./router/user-router');
+const showRouter = require('./router/showRouter');
+const userRouter = require ('./router/userRouter');
 
 app.use(express.json());
 
